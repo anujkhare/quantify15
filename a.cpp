@@ -78,40 +78,62 @@ int main()
 
 	// Read TickFile from string stream and parse each line
 	Tick ticks[N];
-	multimap<int, int> index; //TODO
+	multimap<int, int> index; //TODO: EQ order only in C++11
 
 	switch (q_type) {
 		case 's': {
-			cout<<"hello there!\n";
+			// TODO: NOTE THAT IT IS NOT NECESSARY THAT A TEST TIMESTAMP BE IN DATA
+			cout<<"sum branch\n";
+
 			for(int i=0; i<N; ++i) {
 				getline(stream, line);
 				//cout<<line<<endl;
+				//TODO: don't need to store this
 				ticks[i].parse(line);
 				index.insert(pair<int, int>(ticks[i].time, i));
 				ticks[i].display();
+				//pair<multimap<int, int>::iterator, multimap<int, int>::iterator> ret = index.equal_range(1009);
+				//ret.second --;
+				//cout<<ret.first->second<<" - "<<ret.second->second<<endl;
 			}
+		
+			// Read and answer queries!
+			int t1, t2; string f1, sym;
+			long long sum = 0;
+			while(getline(std::cin, line)) {
+				//cout<<line<< endl;
+				istringstream is(line);
+				sum = 0;
 
+				is>>temp>>t1>>t2>>sym>>f1;
+				//cout<<" "<<temp<<" "<<t1<<" "<<t2<<" "<<sym<<" "<<f1<<" "<<endl;
+				cout<<t1<<endl;
+
+				pair<multimap<int, int>::iterator, multimap<int, int>::iterator> ret = index.equal_range(t1);
+				//ret.second --;
+				// when key t1 is greater than maximum key present, it returns N, first element
+				if(ret.first->second == ret.second->second && ret.first->first == N)
+					sum = 0;
+					
+				// when key t2 is less than min key present, it returns 
+				cout<<ret.first->first<<" - "<<ret.first->second<<endl;
+				cout<<ret.second->first<<" - "<<ret.second->second<<endl;
+				//cout<<ret.first->second<<" - "<<ret.first->secondret.second->second<<endl;
+			}
 		} break;
 
 		case 'p': {
 
 		} break;
 
-		case 'd': {
-
-		} break;
-
 		case 'm': {
 
 		} break;
-	}
-	cout << "Done processing Tick file\n";	//TODO: where to put this?
 
-	// Read and answer queries!
-	while(getline(std::cin, line)) {
-		int t1, t2, k;
-		string f1, f2, symbol;
-		cout<<line<< endl;
+		case 'd': {
+
+		} break;
 	}
+
 	return 0;
 }
